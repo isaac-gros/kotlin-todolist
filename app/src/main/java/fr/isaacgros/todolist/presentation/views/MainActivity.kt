@@ -1,17 +1,17 @@
 package fr.isaacgros.todolist.presentation.views
 
-import android.content.Intent
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import fr.isaacgros.todolist.R
 import fr.isaacgros.todolist.models.User
 import fr.isaacgros.todolist.network.ServiceBuilder
 import fr.isaacgros.todolist.network.UserService
+import fr.isaacgros.todolist.utils.Consts
 import fr.isaacgros.todolist.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,6 +20,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,14 @@ class MainActivity : AppCompatActivity() {
         // Set nav host to navigate between fragments
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
+
+        // Check if shared pref keys are set
+        sharedPref = getSharedPreferences(Consts.SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        val firstNameKey = sharedPref.getString(Consts.FIRST_NAME_KEY, "")
+        val lastNameKey = sharedPref.getString(Consts.LAST_NAME_KEY, "")
+        if(firstNameKey != null && lastNameKey != null) {
+            this.navigateToTodosActivity()
+        }
     }
 
     // Go to todos activity
@@ -52,8 +61,16 @@ class MainActivity : AppCompatActivity() {
                 response: Response<User>
             ) {
                 if (response.isSuccessful) {
-                    // TODO: Store name and first name in shared pref
-                    activityRef.navigateToTodosActivity()
+                    val user = response.body()
+                    if (user != null) {
+
+                        // Store user details in shared pref
+                        sharedPref.edit().putString(Consts.FIRST_NAME_KEY, user.prenom).apply()
+                        sharedPref.edit().putString(Consts.LAST_NAME_KEY, user.nom).apply()
+                        activityRef.navigateToTodosActivity()
+                    } else {
+                        Utils.alert(activityRef, "Le serveur n'a pas retourné de valeur correcte.")
+                    }
                 }
             }
 
