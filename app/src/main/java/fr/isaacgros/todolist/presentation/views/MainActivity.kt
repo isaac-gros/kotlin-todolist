@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
 
     // Go to todos activity
     fun navigateToTodosActivity() {
-        val intent = Intent(this@MainActivity, TodosActivity::class.java)
-        startActivity(intent)
+        // TODO: Call API and store response in Shared Preferences
+        navController.navigate(R.id.loginFragment_to_todosFragment)
     }
 
     // Go to sign up fragment

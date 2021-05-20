@@ -13,6 +13,15 @@ object Utils {
         return password.length > 6
     }
 
+    fun formCompleted(formValues: List<String>): Boolean {
+        for (formValue in formValues) {
+            if (formValue.isBlank()) {
+                return false
+            }
+        }
+        return true
+    }
+
     fun alert(context: AppCompatActivity, message: String) {
         val duration = Toast.LENGTH_SHORT
         val toast = Toast.makeText(context, message, duration)
