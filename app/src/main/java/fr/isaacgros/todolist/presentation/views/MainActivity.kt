@@ -1,5 +1,6 @@
 package fr.isaacgros.todolist.presentation.views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
@@ -14,13 +15,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.loginFragment) as NavHostFragment
-
+        // Set nav host to navigate between fragments
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
     }
 
-    fun navigateToFragment() {
-        // TODO : Set the function to navigate between fragments
+    // Go to todos activity
+    fun navigateToTodosActivity() {
+        val intent = Intent(this@MainActivity, TodosActivity::class.java)
+        startActivity(intent)
+    }
+
+    // Go to sign up fragment
+    fun navigateToSignUpFragment() {
+        navController.navigate(R.id.loginFragment_to_signUpFragment)
     }
 }

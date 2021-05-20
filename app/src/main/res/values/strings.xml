@@ -1,6 +1,23 @@
 <resources>
+    <!--  App details  -->
     <string name="app_name">TodoList</string>
+
+    <!-- Dummy data -->
     <string name="hello_login_fragment">Hello login fragment !</string>
     <string name="hello_signup_fragment">Hello signup fragment !</string>
     <string name="hello_todos_activity">Hello todo activity !</string>
+
+    <!-- Hints -->
+    <string name="email_hint">Adresse email…</string>
+    <string name="password_hint">Mot de passe…</string>
+    <string name="first_name_hint">Votre prénom…</string>
+    <string name="last_name_hint">Votre nom…</string>
+
+    <!--  TODOS random hint values  -->
+
+    <!-- Buttons texts -->
+    <string name="button_login">Connexion</string>
+    <string name="button_signup">Inscription</string>
+    <string name="button_create_account">Créer un compte</string>
+
 </resources>
