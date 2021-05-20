@@ -1,11 +1,12 @@
-package fr.isaacgros.todolist
+package fr.isaacgros.todolist.presentation.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import fr.isaacgros.todolist.R
 
-class MainActivity : AppCompatActivity() {
+class TodosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_todos)
     }
 }
