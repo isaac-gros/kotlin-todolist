@@ -46,7 +46,7 @@ class LoginFragment : Fragment() {
 
                 } else {
                     // Navigate to TODOS
-                    (activity as MainActivity).navigateToTodosActivity()
+                    (activity as MainActivity).loginUser(emailValue, passwordValue)
                 }
             } else {
                 Utils.alert(mainActivity, "Vous devez remplir les deux champs textes.");
