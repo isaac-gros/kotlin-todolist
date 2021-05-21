@@ -32,10 +32,15 @@ class MainActivity : AppCompatActivity() {
 
         // Check if shared pref keys are set
         sharedPref = getSharedPreferences(Consts.SHARED_PREF_KEY, Context.MODE_PRIVATE)
-        val firstNameKey = sharedPref.getString(Consts.FIRST_NAME_KEY, "")
-        val lastNameKey = sharedPref.getString(Consts.LAST_NAME_KEY, "")
-        if(firstNameKey != null && lastNameKey != null) {
-            this.navigateToTodosActivity()
+
+        // Store MainActivity
+        val sharedPrefs = getSharedPreferences(Consts.SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        val firstName = sharedPrefs?.getString(Consts.FIRST_NAME_KEY, "")
+        val lastName = sharedPrefs?.getString(Consts.LAST_NAME_KEY, "")
+        if (firstName != null && lastName != null) {
+            if(firstName.isNotBlank() && lastName.isNotBlank()) {
+                this.navigateToTodosActivity()
+            }
         }
     }
 
@@ -49,35 +54,8 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.loginFragment_to_signUpFragment)
     }
 
-    // Call API to login user
-    fun loginUser(email: String, password: String) {
-        val activityRef = this
-        val request = ServiceBuilder.buildService(UserService::class.java)
-        val call = request.getUser(email, password)
-
-        call.enqueue(object : Callback<User> {
-            override fun onResponse(
-                call: Call<User>,
-                response: Response<User>
-            ) {
-                if (response.isSuccessful) {
-                    val user = response.body()
-                    if (user != null) {
-
-                        // Store user details in shared pref
-                        sharedPref.edit().putString(Consts.FIRST_NAME_KEY, user.prenom).apply()
-                        sharedPref.edit().putString(Consts.LAST_NAME_KEY, user.nom).apply()
-                        activityRef.navigateToTodosActivity()
-                    } else {
-                        Utils.alert(activityRef, "Le serveur n'a pas retourné de valeur correcte.")
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                t.message?.let { Log.d("USER", it) }
-                Utils.alert(activityRef, "Une erreur est survenue lors de la connexion.")
-            }
-        })
+    // Go to login fragment
+    fun navigateToLoginFragment() {
+        navController.navigate(R.id.todosFragment_to_loginFragment)
     }
 }

@@ -10,10 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import fr.isaacgros.todolist.R
 import fr.isaacgros.todolist.utils.Consts
+import kotlinx.android.synthetic.main.fragment_todos.*
 
 class TodosFragment : Fragment() {
-
-    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,11 +27,23 @@ class TodosFragment : Fragment() {
 
         // Retrieve MainActivity
         val mainActivity = (activity as MainActivity)
-        sharedPref = mainActivity.getSharedPreferences(Consts.SHARED_PREF_KEY, Context.MODE_PRIVATE)
-        val firstNameKey = sharedPref.getString(Consts.FIRST_NAME_KEY, "")
-        val lastNameKey = sharedPref.getString(Consts.LAST_NAME_KEY, "")
+        val sharedPref = this.activity?.getSharedPreferences(Consts.SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
-        // TODO: Set welcome message
+        // Reset shared prefs
+        fragTodos_resetSharedPrefs.setOnClickListener {
+            sharedPref?.edit()?.remove(Consts.FIRST_NAME_KEY)?.commit()
+            sharedPref?.edit()?.remove(Consts.LAST_NAME_KEY)?.commit()
+            mainActivity.navigateToLoginFragment()
+        }
 
+        // Set welcome message
+        if(sharedPref != null) {
+            val firstNameKey = sharedPref.getString(Consts.FIRST_NAME_KEY, "")
+            val lastNameKey = sharedPref.getString(Consts.LAST_NAME_KEY, "")
+            if (firstNameKey != null && lastNameKey != null) {
+                val welcome = resources.getString(R.string.todos_welcome)
+                fragTodos_welcomeText.text = String.format((welcome), firstNameKey, lastNameKey)
+            }
+        }
     }
 }

@@ -11,13 +11,13 @@
         android:name="fr.isaacgros.todolist.presentation.views.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/loginFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment"/>
-        <action
-            android:id="@+id/loginFragment_to_todosFragment"
-            app:destination="@id/todosFragment"/>
     </fragment>
+    <action
+        android:id="@+id/loginFragment_to_signUpFragment"
+        app:destination="@id/signUpFragment"/>
+    <action
+        android:id="@+id/loginFragment_to_todosFragment"
+        app:destination="@id/todosFragment"/>
 
     <!-- Sign up fragment action -->
     <fragment
@@ -25,10 +25,10 @@
         android:name="fr.isaacgros.todolist.presentation.views.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up">
-        <action
-            android:id="@+id/signUpFragment_to_todosFragment"
-            app:destination="@id/todosFragment"/>
     </fragment>
+    <action
+        android:id="@+id/signUpFragment_to_todosFragment"
+        app:destination="@id/todosFragment"/>
 
     <!-- Todos fragment -->
     <fragment
@@ -36,4 +36,7 @@
         android:name="fr.isaacgros.todolist.presentation.views.TodosFragment"
         android:label="fragment_todos"
         tools:layout="@layout/fragment_todos" />
+    <action
+        android:id="@+id/todosFragment_to_loginFragment"
+        app:destination="@id/loginFragment"/>
 </navigation>

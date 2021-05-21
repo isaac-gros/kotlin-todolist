@@ -1,11 +1,13 @@
 package fr.isaacgros.todolist.presentation.views
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import fr.isaacgros.todolist.R
+import fr.isaacgros.todolist.utils.Consts
 import fr.isaacgros.todolist.utils.Utils
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 
@@ -40,14 +42,19 @@ class SignUpFragment : Fragment() {
 
                 if(!Utils.emailValid(emailValue)) {
                     // Wrong email format
-                    Utils.alert(mainActivity, "Vous devez saisir une adresse mail valide.")
+                    Utils.alert((mainActivity as MainActivity), "Vous devez saisir une adresse mail valide.")
 
                 } else if (!Utils.passwordValid(passwordValue)) {
                     // Wrong password format
-                    Utils.alert(mainActivity, "Le mot de passe doit contenir au moins 6 caractères.")
+                    Utils.alert((mainActivity as MainActivity), "Le mot de passe doit contenir au moins 6 caractères.")
                 } else {
 
-                    // TODO : Store values in shared preferences
+                    // Store user details in shared pref
+                    val sharedPref = this.activity?.getSharedPreferences(Consts.SHARED_PREF_KEY, Context.MODE_PRIVATE)
+                    if(sharedPref != null) {
+                        sharedPref.edit().putString(Consts.FIRST_NAME_KEY, firstNameValue).apply()
+                        sharedPref.edit().putString(Consts.LAST_NAME_KEY, lastNameValue).apply()
+                    }
                     (activity as MainActivity).navigateToTodosActivity()
                 }
             } else {
