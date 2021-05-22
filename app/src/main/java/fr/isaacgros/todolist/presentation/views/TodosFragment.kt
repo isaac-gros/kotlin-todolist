@@ -8,11 +8,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import fr.isaacgros.todolist.R
+import fr.isaacgros.todolist.models.Task
+import fr.isaacgros.todolist.presentation.AdapterRecyclerView
+import fr.isaacgros.todolist.presentation.data.TaskViewModel
 import fr.isaacgros.todolist.utils.Consts
 import kotlinx.android.synthetic.main.fragment_todos.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class TodosFragment : Fragment() {
+
+    private lateinit var viewModel: TaskViewModel
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,25 +34,48 @@ class TodosFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Retrieve MainActivity
-        val mainActivity = (activity as MainActivity)
-        val sharedPref = this.activity?.getSharedPreferences(Consts.SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        activity?.let {
+            sharedPref = it.getSharedPreferences(Consts.SHARED_PREF_KEY, Context.MODE_PRIVATE)
+        }
 
-        // Reset shared prefs
-        fragTodos_resetSharedPrefs.setOnClickListener {
-            sharedPref?.edit()?.remove(Consts.FIRST_NAME_KEY)?.commit()
-            sharedPref?.edit()?.remove(Consts.LAST_NAME_KEY)?.commit()
-            mainActivity.navigateToLoginFragment()
+        context?.let {
+            viewModel = TaskViewModel(it)
         }
 
         // Set welcome message
-        if(sharedPref != null) {
-            val firstNameKey = sharedPref.getString(Consts.FIRST_NAME_KEY, "")
-            val lastNameKey = sharedPref.getString(Consts.LAST_NAME_KEY, "")
-            if (firstNameKey != null && lastNameKey != null) {
-                val welcome = resources.getString(R.string.todos_welcome)
-                fragTodos_welcomeText.text = String.format((welcome), firstNameKey, lastNameKey)
-            }
+        val firstNameKey = sharedPref.getString(Consts.FIRST_NAME_KEY, "")
+        val lastNameKey = sharedPref.getString(Consts.LAST_NAME_KEY, "")
+        if (firstNameKey != null && lastNameKey != null) {
+            val welcome = resources.getString(R.string.todos_welcome)
+            fragTodos_welcomeText.text = String.format((welcome), firstNameKey, lastNameKey)
         }
+
+        // Set list
+        viewModel.displayAllTasks(fragTodos_todosRecyclerView, context)
+
+        // Reset shared prefs
+        fragTodos_resetSharedPrefs.setOnClickListener {
+            resetSharedPrefs()
+        }
+
+        fragTodos_newTaskButton.setOnClickListener {
+            createTask()
+        }
+    }
+
+    private fun resetSharedPrefs() {
+        sharedPref.edit()?.remove(Consts.FIRST_NAME_KEY)?.commit()
+        sharedPref.edit()?.remove(Consts.LAST_NAME_KEY)?.commit()
+        (activity as MainActivity).navigateToLoginFragment()
+    }
+
+    private fun createTask() {
+        val newTask = Task(
+            content = fragTodos_newTaskInput.text.toString(),
+            done = false
+        )
+        viewModel.insertOneTask(newTask)
+        Log.i("caca", newTask.toString())
+        fragTodos_newTaskInput.text = null
     }
 }

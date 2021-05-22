@@ -4,18 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import fr.isaacgros.todolist.R
-import fr.isaacgros.todolist.models.User
-import fr.isaacgros.todolist.network.ServiceBuilder
-import fr.isaacgros.todolist.network.UserService
 import fr.isaacgros.todolist.utils.Consts
-import fr.isaacgros.todolist.utils.Utils
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
