@@ -7,7 +7,7 @@
     <string name="password_hint">Mot de passe…</string>
     <string name="first_name_hint">Votre prénom…</string>
     <string name="last_name_hint">Votre nom…</string>
-    <string name="task_hint">Votre tâche…</string>
+    <string name="task_hint">Nouvelle tâche…</string>
 
     <!-- Buttons texts -->
     <string name="button_login">Connexion</string>
@@ -16,6 +16,7 @@
 
     <!-- TODOs texts -->
     <string name="todos_welcome">Bonjour %1$s %2$s !</string>
-    <string name="todos_reset_shared_pref">Undo</string>
+    <string name="todos_reset_shared_pref">Déconnexion</string>
+    <string name="todos_task_remove_desc">Supprimer la tâche</string>
 
 </resources>
