@@ -42,7 +42,6 @@ class LoginFragment : Fragment() {
             val passwordValue = fragLogin_PasswordView.text.toString()
 
             // Check fields validity
-            val formValid = false
             if(emailValue.isNotBlank() && passwordValue.isNotBlank()) {
 
                 if(!Utils.emailValid(emailValue)) {

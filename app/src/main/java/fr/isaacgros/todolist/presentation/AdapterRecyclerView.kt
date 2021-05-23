@@ -33,6 +33,11 @@ class AdapterRecyclerView (
         holder.bind(item, position)
     }
 
+    fun addItem(task: Task) {
+        list.add(task)
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(task: Task, position: Int) {

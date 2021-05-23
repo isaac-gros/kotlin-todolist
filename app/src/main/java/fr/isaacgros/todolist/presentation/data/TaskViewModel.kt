@@ -1,6 +1,7 @@
 package fr.isaacgros.todolist.presentation.data
 
 import android.content.Context
+import android.graphics.Rect
 import android.util.Log
 import android.view.animation.AnticipateInterpolator
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import fr.isaacgros.todolist.models.Task
 import fr.isaacgros.todolist.presentation.AdapterRecyclerView
 import fr.isaacgros.todolist.utils.Consts
 import kotlinx.android.synthetic.main.fragment_todos.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -22,22 +24,25 @@ class TaskViewModel(context: Context) : ViewModel() {
         Database::class.java, Consts.DB_NAME
     ).build()
 
-    fun insertOneTask(task: Task) {
-        GlobalScope.launch {
+    // Je n'ai pas réussi à mettre à jour la liste une fois qu'une tâche est créée
+    fun insertOneTask(task: Task, recyclerView: RecyclerView, context: Context?) {
+        GlobalScope.launch(Dispatchers.IO) {
             val taskDao = db.tasksDao()
             taskDao.insertOne(task)
-            Log.d("task", task.toString())
+            displayAllTasks(recyclerView, context)
         }
 
     }
 
     // Je pense qu'il y a sûrement une meilleure façon pour ça... c'est ma propre solution !
     fun displayAllTasks(recyclerView: RecyclerView, context: Context?) {
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             val tasks = db.tasksDao().getAll()
-            recyclerView.adapter =
-                AdapterRecyclerView(ArrayList(tasks), context)
+
+            // Reset RecyclerView
+            recyclerView.adapter = AdapterRecyclerView(ArrayList(tasks), context)
             recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter?.notifyDataSetChanged()
         }
     }
 

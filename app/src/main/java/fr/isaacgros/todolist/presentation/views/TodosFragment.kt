@@ -3,23 +3,21 @@ package fr.isaacgros.todolist.presentation.views
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import fr.isaacgros.todolist.R
 import fr.isaacgros.todolist.models.Task
-import fr.isaacgros.todolist.presentation.AdapterRecyclerView
 import fr.isaacgros.todolist.presentation.data.TaskViewModel
 import fr.isaacgros.todolist.utils.Consts
+import fr.isaacgros.todolist.utils.Utils
 import kotlinx.android.synthetic.main.fragment_todos.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class TodosFragment : Fragment() {
 
+    private lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: TaskViewModel
     private lateinit var sharedPref: SharedPreferences
 
@@ -51,6 +49,7 @@ class TodosFragment : Fragment() {
         }
 
         // Set list
+        recyclerView = fragTodos_todosRecyclerView
         viewModel.displayAllTasks(fragTodos_todosRecyclerView, context)
 
         // Reset shared prefs
@@ -70,12 +69,15 @@ class TodosFragment : Fragment() {
     }
 
     private fun createTask() {
-        val newTask = Task(
-            content = fragTodos_newTaskInput.text.toString(),
-            done = false
-        )
-        viewModel.insertOneTask(newTask)
-        Log.i("caca", newTask.toString())
-        fragTodos_newTaskInput.text = null
+        activity?.runOnUiThread {
+            val taskContent = fragTodos_newTaskInput.text.toString()
+            val newTask = Task(
+                content = taskContent,
+                done = false
+            )
+            viewModel.insertOneTask(newTask, recyclerView, context)
+            Utils.alert((activity as MainActivity), "La tâche ''$taskContent'' a été crée")
+            fragTodos_newTaskInput.text = null
+        }
     }
 }
