@@ -76,7 +76,7 @@ class TodosFragment : Fragment() {
                 done = false
             )
             viewModel.insertOneTask(newTask, recyclerView, context)
-            Utils.alert((activity as MainActivity), "La tâche ''$taskContent'' a été crée")
+            Utils.alert((activity as MainActivity), "La tâche ''$taskContent'' a été ajoutée")
             fragTodos_newTaskInput.text = null
         }
     }

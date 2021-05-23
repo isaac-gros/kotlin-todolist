@@ -26,17 +26,16 @@ class TaskViewModel(context: Context) : ViewModel() {
 
     // Je n'ai pas réussi à mettre à jour la liste une fois qu'une tâche est créée
     fun insertOneTask(task: Task, recyclerView: RecyclerView, context: Context?) {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch() {
             val taskDao = db.tasksDao()
             taskDao.insertOne(task)
-            displayAllTasks(recyclerView, context)
         }
 
     }
 
     // Je pense qu'il y a sûrement une meilleure façon pour ça... c'est ma propre solution !
     fun displayAllTasks(recyclerView: RecyclerView, context: Context?) {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch {
             val tasks = db.tasksDao().getAll()
 
             // Reset RecyclerView
